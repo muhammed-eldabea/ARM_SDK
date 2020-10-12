@@ -12,16 +12,21 @@
     - void RCC_voidEnableClock(uint8 Copy_u8PeriphealID,uint8 Copy_u8BusName) ; 
     - uint8 RCC_uint8ReturnCalibration(void) ; 
  _________________________________________________________________
+
 2. **GPIO** 
-  APIs Provided : 
+
+  APIs Provided :
+ 
      - void GPIO_voidSetDataDirection(uint8 copy_u8PORT,uint8 copy_u8PIN,uint8 copy_u8MODE) ; 
      - void GPIO_voidSetDataValue(uint8 copy_u8PORT,uint8 copy_u8PIN,uint8 copy_uVALUE) ; 
      - uint8 GPIO_u8GetDataValue(uint8 copy_u8PORT,uint8 copy_u8PIN) ; 
      - void GPIO_voidWriteToPort(uint8 copy_u8PORT,uint16 copy_u8PORTvalue) ; 
      ___________________________________________________________
+
 3. **NVIC** 
 
-   APIs provided : 
+   APIs :
+ 
       - void NCIV_voidEnableInterrupt(uint8 copy_u8InterruptId)  ; 
       - void NCIV_voidDisableInterrupt(uint8 copy_u8InterruptId) ; 
       - void NCIV_voidClearPendingIREQ(uint8 copy_u8InterruptId)  ; 
@@ -29,6 +34,7 @@
       - uint8 NVIC_u8ReacActiveInterruptFlag(uint8 copy_u8InterruptId) ; 
       - void NCIV_voidSetPirority(sint8 copy_s8InterruptID,uint8 copy_u8GroubPirority,uint8 copy_u8SubGroubPirority,uint32 copy_u32Groub)  ;  
      _________________________________________________________________________
+
  4.**EXTI** (provided by ENG Ahmed Assaf)
  
     APIS : 
@@ -38,6 +44,7 @@
        - void MEXTI_voidDisableEXTI(u8 Copy_u8EXTILine);
        - void MEXTI_voidSoftwareTrigger(u8 Copy_u8EXTILine); 
        ____________________________________________________________
+
 5. **DMA** 
  APIs : 
 
@@ -46,6 +53,7 @@
        - void MDMA_voidDisableInterrupt (u8 Copy_u8ChanelID ,u8 Copy_u8Interrupt)  ; 
        -  void MDMA_voidChannelStart(U8 Copy_u8ChannelID ,u32 * Copy_Pu32peripheralAdd, u32 * Copy_Pu32MemorAdd,u16 Copy_u16BlockLen)  ;   
        ______________________________________________________________________
+
 6. **SYSTICK** 
 
   APIs : 
@@ -57,6 +65,7 @@
         - uint32 MSTK_voidGetElpasedTime(void) ;
         - uint32 MSTK_voidGetRemainingTime(void) ;  
         _________________________________________________________________________
+
  7. **SPI** 
    APIs : 
 
@@ -64,6 +73,7 @@
         - void MSPI_voidSendGetDataSynch(u16 Copy_u32DataToSend , u16 *Copy_u32DataToGet) ; 
         - void MSPI_voidSendGetDataSynch(u16 Copy_u32DataToSend , void (*CallBack)(u8)) ; 
         __________________________________________________________
+
 8. **USART** 
  APIs :  
 
