@@ -6,7 +6,8 @@
 
 
 1. **RCC** (Rest and Clock control) 
-    APIs provided : 
+     APIs provided :
+ 
     - void RCC_voidInitSysClock(void)  ;
     - void RCC_voidDisableClock(uint8 Copy_u8PeriphealID,uint8 Copy_u8BusName) ; 
     - void RCC_voidEnableClock(uint8 Copy_u8PeriphealID,uint8 Copy_u8BusName) ; 
@@ -56,7 +57,8 @@
 
 6. **SYSTICK** 
 
-  APIs : 
+
+         APIs : 
         - void MSTK_voidInit(void) ;
         - void MSTK_voidSetBusyWait(uint32 Copy_u32Ticks) ;
         - void MSTK_voidSetIntervalSingle(uint32 Copy_u32Ticks,void(*Copy_ptr)(void)) ;
@@ -67,8 +69,8 @@
         _________________________________________________________________________
 
  7. **SPI** 
-   APIs : 
-
+         APIs :
+ 
         - void MSPI_voidinit(void) ; 
         - void MSPI_voidSendGetDataSynch(u16 Copy_u32DataToSend , u16 *Copy_u32DataToGet) ; 
         - void MSPI_voidSendGetDataSynch(u16 Copy_u32DataToSend , void (*CallBack)(u8)) ; 
