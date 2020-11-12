@@ -1,78 +1,155 @@
-/************************************************************************/ 
-/* [AUTHER]      : MUHAMMED ELDABEA HASHEM                              */ 
-/* [DATE]        : 5 OCT 2020                                           */ 
-/* [VERSION]     : V01                                                  */ 
-/************************************************************************/  
+/*========================================================================*/  
+/* [AUTHOR]      :  Muhammed Eldabea Hashem                               */
+/* [DATE ]       :  7 NOV 2020   										  */
+/* [VERSION]     :  V2.1                                                  */
+/*========================================================================*/
 
 
-#ifndef UART_CONFIG_H
-#define UART_CONFIG_H 
+#ifndef USART_CONFIG_H_ 
+#define USART_CONFIG_H_ 
 
 
+/********** HARDWARE AND BAUDRATE CONFIGURATION ***********/
 
-/**** MODE SELECT ****/
-/*[OPTION] : Disable >> Enable  */
-#define USART_RX_ENABLE  Enable 
+/* 
+option : 
+        (0)  >>  DISABLE TX   
+        (1)  >>  ENSABLE TX       
 
-/*[OPTION] : Disable >> Enable  */
-#define USART_TX_ENABLE  Enable 
+*/
+#define USART_TX_ENABLE   1 
+/* 
+option : 
+        (0)  >>  DISABLE RX   
+        (1)  >>  ENSABLE RX       
 
+*/
+#define USART_RX_ENABLE   1
 
-/* next value used with frequenct 8MHz*/
-/*For Baud Rate yoy can use one of the next values*/
 /* 4800   >> 0x683
    9600   >> 0x341
    14400  >> 0x2BC
    38400  >> 0x0D0
    115200 >> 0x045                                           */ 
-#define USART_EQV_BUAD_RATE   0x341 
-
-/*[OPTION] : Disable >> Enable  */
-#define USART_ENABLE_MODULE  Enable 
-
-/*[OPTION] :  USART_8_BIT >> USART_9_BIT */
-#define USART_WORD_LENGTH    USART_8_BIT 
-
-/*[OPTION] : USART_IDLE_LINE_WAKE >> USART_ADDRESS_MARK_WAKE */
-#define USART_WAKE_UP_METHOD USART_IDLE_LINE_WAKE 
-
-/*[OPTION] : Disable >> Enable  */
-#define USART_PARITY_ENABLE  Disable 
-
-/* [OPRION] :   USART_EVEN_PARITY >> USART_ODD_PARITY */
-#define USART_PARITY_SELECTION USART_EVEN_PARITY 
-
-/*Receiver wakeup*/
-/*[OPTION] : Disable >> Enable  */
-#define USART_RWU_ENABLE  Disable 
 
 
+#define  USART_BAUDRATE_VALUE 0x341 
 
-/****** INTERRUPT SOURCE CONTROL ******/
 
-/*[OPTION] : Disable >> Enable  */
-#define USART_PARITY_INTERRUPT  Disable 
+/**
+    STEADY LOW VALUE IN THE CK PIN  >> 0 
+	STEADY HIGH VALUE IN THE CK PIN >> 1
+*/
 
-/*[OPTION] : Disable >> Enable  */
-#define USART_TX_INTERRUPT  Disable 
+#define  USART_CLOCK_POLARITY 0 
 
-/*[OPTION] : Disable >> Enable  */
-#define USART_TX_COMPLET_INTERRUPT  Disable 
+/**
+    READ WITH FIRST  CLOCK CAPTURE  >> 0 
+	READ WITH SECOND CLOCK CAPTURE  >> 1
+*/
 
-/*[OPTION] : Disable >> Enable  */
-#define USART_RX_INTERRUPT  Disable 
-
-/*[OPTION] : Disable >> Enable  */
-#define USART_IDLE_INTERRUPT  Disable 
+#define  USART_CLOCK_PHASE 0 
 
 
 
 
+/******************************************************/
+
+/* 
+option : 
+        (0)  >>  1 Start BIT >> 8 BIT_DATA >> n Stop Bit 
+        (1)  >>  1 Start BIT >> 9 BIT_DATA >> n Stop Bit    
+
+*/
+
+#define USART_WORD_LEGNTH   0 
+
+/* 
+option : 
+        (0)  >>  IDLE LINE  
+        (1)  >>  Address MArk     
+
+*/
+
+#define USART_WAKE_UP_METHOD   0 
+
+/* 
+option : 
+        (0)  >>  PARITY CONTROL DISABLE   
+        (1)  >>  PARITY CONTROL ENABLE      
+
+*/
+#define USART_PARITY_STATE_SELECTION    0  
+
+/* 
+option : 
+        (0)  >>  EVEN PARITY SELECTION   
+        (1)  >>  ODD  PARITY SELECTION      
+
+*/
+#define USART_PARITY_TYPE_SELECTION   0 
 
 
+/*
+*
+ >> 1   STOP BIT  0 
+ >> 1.5 STOP BIT  1 
+ >> 2   STOP BIT  2
+ >> 0.5 STOP BIT  3 
+
+*/
 
 
+#define USART_STOP_BIT_SELECTION  0 
 
+/*=============================================================*/ 
+
+
+/*********  INTERRUPT CONFIURATION **********/
+
+/* 
+option : 
+        (0)  >>  DISABLE PARITY INTERRUPT    
+        (1)  >>  ENSABLE PARITY INTERRUPT      
+
+*/
+#define USART_PARITY_INTERRUPT_ENABLE   0 
+
+
+/* 
+option : 
+        (0)  >>  DISABLE TX INTERRUPT    
+        (1)  >>  ENSABLE TX INTERRUPT      
+
+*/
+#define USART_TX_INTERRUPT_ENABLE   0 
+
+
+/* 
+option : 
+        (0)  >>  DISABLE TCI INTERRUPT    
+        (1)  >>  ENSABLE TCI INTERRUPT      
+
+*/
+#define TRANSMITION_COMPLET_INTERRUPT 0 
+
+/* 
+option : 
+        (0)  >>  DISABLE RX INTERRUPT    
+        (1)  >>  ENSABLE RX INTERRUPT      
+
+*/
+#define USART_RX_INTERRUPT_ENABLE   0 
+
+/* 
+option : 
+        (0)  >>  DISABLE IDLE INTERRUPT    
+        (1)  >>  ENSABLE IDLE INTERRUPT      
+
+*/
+#define USART_IDLE_INTERRUPT_ENABLE   0 
+
+ /*========================================================*/ 
 
 
 

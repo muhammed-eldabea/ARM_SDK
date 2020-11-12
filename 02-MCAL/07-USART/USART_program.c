@@ -1,118 +1,122 @@
-/************************************************************************/ 
-/* [AUTHER]      : MUHAMMED ELDABEA HASHEM                              */ 
-/* [DATE]        : 5 OCT 2020                                           */ 
-/* [VERSION]     : V01                                                  */ 
-/************************************************************************/  
+/*========================================================================*/  
+/* [AUTHOR]      :  Muhammed Eldabea Hashem                               */
+/* [DATE ]       :  7 NOV 2020   										  */
+/* [VERSION]     :  V2.1                                                  */
+/*========================================================================*/
 
-#include "01-LIB/01-STD_TYPES/STD_TYPES.h"
-#include "01-LIB/02-BIT_MATH/BIT_MATH.h" 
-
-
-#include "02-MCAL/08-USART/USART_interface.h"
-#include "02-MCAL/08-USART/USART_private.h"
-#include "02-MCAL/08-USART/USART_config.h"
+#include "STD_TYPES.h" 
+#include "BIT_MATH.h" 
 
 
+#include  "USART_interface.h" 
+#include "USART_config.h" 
+#include "USART_private.h" 
 
 
 
-void MUSART_voidInit(void) 
+
+void USART_INIT( )
+{ 
+
+
+
+
+	/** HARDWARE CONFIGURATION **/
+
+#if USART_WORD_LEGNTH == 1 
+	SET_BIT((Copy_USART_REG_PTR->CR[1]),12) ; 
+#endif 
+
+#if USART_WAKE_UP_METHOD == 1 
+	SET_BIT((Copy_USART_REG_PTR->CR[1]),11) ;
+#endif 
+
+#if USART_TX_ENABLE == 1 
+	SET_BIT((USART1_REGs_ACCESS->CR[0]),3) ;
+#endif 
+
+#if USART_RX_ENABLE == 1
+	SET_BIT((USART1_REGs_ACCESS->CR[0]),2) ;
+#endif 
+
+
+	/***Parity check control ***/
+#if USART_PARITY_STATE_SELECTION == 1 
+	SET_BIT((Copy_USART_REG_PTR->CR[1]),10) ;
+#endif  
+
+#if USART_PARITY_TYPE_SELECTION == 1 
+	SET_BIT((Copy_USART_REG_PTR->CR[1]),9) ;
+#endif 
+
+#if USART_PARITY_INTERRUPT_ENABLE == 1 
+	SET_BIT((Copy_USART_REG_PTR->CR[1]),8) ;
+#endif  
+
+	/** interrupt control configuration **/
+
+#if USART_TX_INTERRUPT_ENABLE == 1 
+	SET_BIT((Copy_USART_REG_PTR->CR[1]),7) ;
+#endif  
+
+#if TRANSMITION_COMPLET_INTERRUPT == 1 
+	SET_BIT((Copy_USART_REG_PTR->CR[1]),6) ;
+#endif  
+
+#if USART_RX_INTERRUPT_ENABLE == 1 
+	SET_BIT((Copy_USART_REG_PTR->CR[1]),5) ;
+#endif
+
+#if USART_IDLE_INTERRUPT_ENABLE == 1 
+	SET_BIT((Copy_USART_REG_PTR->CR[1]),4) ;
+#endif
+
+	/* BAUDRATE CONFIGURATION */
+	USART1_REGs_ACCESS->BRR   =  USART_BAUDRATE_VALUE   ;
+
+	/* STOP BIT  CONFIGURATION */
+	USART1_REGs_ACCESS->CR[1]  &= 0XFFFFCFFF ;
+	USART1_REGs_ACCESS->CR[1]  |=  (( 0X03 & USART_STOP_BIT_SELECTION )<<12)  ;
+
+
+
+	/*enable the usart module */
+	SET_BIT((USART1_REGs_ACCESS->CR[0]),13) ;
+
+	/* CLEAR THE STAUTES REGISTER */
+	USART1_REGs_ACCESS->SR = 0  ;
+
+}   
+
+
+
+
+void USART_SEND_DATA (u8 DATA)
 {
+	USART1_REGs_ACCESS -> DR = DATA  ;
+	while (GET_BIT((USART1_REGs_ACCESS -> SR) , 6 )  !=  1 ) ;
 
-/*configure the Baud Rate depending on 
-the value of the frequency and the value of  Selected Baud Rate */
-USART_REG->BRR = USART_EQV_BUAD_RATE ;  
-
-
-
-#if USART_WORD_LENGTH == USART_9_BIT 
-SET_BIT(USART_REG->CR1 , 12) ; 
-#endif 
-
-#if USART_WAKE_UP_METHOD == USART_ADDRESS_MARK_WAKE 
-SET_BIT(USART_REG->CR1 , 11) ; 
-#endif
-
-#if USART_PARITY_ENABLE == Enable 
-SET_BIT(USART_REG->CR1 , 10) ; 
-#endif 
-
-#if USART_PARITY_ENABLE == Enable 
-SET_BIT(USART_REG->CR1 , 10) ; 
-#endif  
-
-#if USART_PARITY_SELECTION == USART_ODD_PARITY 
-SET_BIT(USART_REG->CR1 , 9) ; 
-#endif  
-
-#if USART_PARITY_INTERRUPT == Enable 
-SET_BIT(USART_REG->CR1 , 8) ; 
-#endif   
-
-#if USART_TX_INTERRUPT == Enable 
-SET_BIT(USART_REG->CR1 , 7) ; 
-#endif  
-
-#if USART_TX_COMPLET_INTERRUPT == Enable 
-SET_BIT(USART_REG->CR1 , 6) ; 
-#endif 
-
-#if USART_TX_COMPLET_INTERRUPT == Enable 
-SET_BIT(USART_REG->CR1 , 5) ; 
-#endif 
-
-#if USART_RX_INTERRUPT == Enable 
-SET_BIT(USART_REG->CR1 , 4) ; 
-#endif 
+} 
 
 
-#if USART_TX_ENABLE == Enable 
-SET_BIT(USART_REG->CR1 , 3) ; 
-#endif
-
-#if USART_RX_ENABLE == Enable 
-SET_BIT(USART_REG->CR1 , 2) ; 
-#endif 
-
-#if USART_RWU_ENABLE == Enable 
-SET_BIT(USART_REG->CR1 , 1) ; 
-#endif 
-
-
-
-
-
-/*enable the module after finishing the configuration */
-#if USART_ENABLE_MODULE == Enable 
-SET_BIT(USART_REG->CR1 , 13) ; 
-#endif
-
-
+void USART_SEND_ARRAY ( u8 DATA_ARR[])
+{ 
+	u8 Local_indx = 0  ;
+	while (DATA_ARR[Local_indx]  != '\0')
+	{
+		USART_SEND_DATA( DATA_ARR[Local_indx])  ;
+		Local_indx++ ;
+	}
 }
 
-void MUSART_voidTransmit(u8 Copy_u8Arr[])  
-{  
-    u8 Local_IDX = 0 ; 
-    /*loop until the terminate char in the array */
-    while (Copy_u8Arr[Local_IDX] != '\0') 
-    {
+u8 USART_GET_DATA ( )
+{
 
-        USART_REG ->DR = Copy_u8Arr[Local_IDX] ;  
-        /*wait for transmitting complet*/ 
-        while (GET_BIT(USART_REG->SR,6) == 0 ) ; 
-        /*increase the pointer index*/
-        Local_IDX++ ; 
-    }
+	u8 DATA = 0 ; 
+
+	while (GET_BIT((USART1_REGs_ACCESS -> SR) , 5 )  !=  1 ) ;
+	DATA =  USART1_REGs_ACCESS -> DR   ;
+	return DATA ;
 
 } 
-
-
-u8   MUSART_u8GetData(void) 
-{ 
-    /*Wait for Data recived */
-     while (GET_BIT(USART_REG->SR,5) == 0 ) ; 
-    return ((u8)(0xFF & (USART_REG->DR))) ; 
-
-} 
-
 

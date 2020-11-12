@@ -1,51 +1,40 @@
-/************************************************************************/ 
-/* [AUTHER]      : MUHAMMED ELDABEA HASHEM                              */ 
-/* [DATE]        : 5 OCT 2020                                           */ 
-/* [VERSION]     : V01                                                  */ 
-/************************************************************************/  
+/*========================================================================*/  
+/* [AUTHOR]      :  Muhammed Eldabea Hashem                               */
+/* [DATE ]       :  7 NOV 2020   										  */
+/* [VERSION]     :  V2.1                                                  */
+/*========================================================================*/
 
-#ifndef USART_PRIVATE_H 
-#define USART_PRIVATE_H 
 
-/****************** Register Definations ******************/ 
+#ifndef USART_PRIVATE_H_
+#define USART_PRIVATE_H_ 
 
-typedef struct 
+
+#define USART1_BASE_ADDRESS 0x40013800
+#define USART2_BASE_ADDRESS 0x40004400
+#define USART3_BASE_ADDRESS 0x40004800
+#define USART4_BASE_ADDRESS 0x40004C00
+#define USART5_BASE_ADDRESS 0x40005000 
+ 
+
+
+
+
+typedef  struct 
 {
-    /* data */
-  volatile  u32 SR ; 
-  volatile  u32 DR ; 
-  volatile  u32 BRR ; 
-  volatile  u32 CR1 ; 
-  volatile  u32 CR2 ; 
-  volatile  u32 CR3 ; 
-  volatile  u32 GTPR ; 
 
-}USART_TYPE;
+    volatile  u32 SR ;
+    volatile  u32 DR ;
+    volatile  u32 BRR ;
+    volatile  u32 CR[3] ; 
+    volatile  u32 GTPR ;
 
+}USART_REG ; 
 
-#define USART_REG  (( volatile  USART_TYPE * )0x40013800) 
-
-
-
-
-/********* Defined Values ************/ 
-
-typedef enum 
-{
-Disable,Enable 
-}Control_option  ; 
-
-typedef enum {
-USART_8_BIT,USART_9_BIT 
-}USART_MWORD_OPTION;
-
-typedef enum {
-USART_IDLE_LINE_WAKE,USART_ADDRESS_MARK_WAKE 
-}USART_WAKEUP_OPTION;
-
-typedef enum {
-USART_EVEN_PARITY,USART_ODD_PARITY 
-}USART_PARITY_SELECTION_OPTION; 
+#define  USART1_REGs_ACCESS ((volatile USART_REG * )USART1_BASE_ADDRESS)
+#define  USART2_REGs_ACCESS ((volatile USART_REG * )USART2_BASE_ADDRESS)
+#define  USART3_REGs_ACCESS ((volatile USART_REG * )USART3_BASE_ADDRESS)
+#define  USART4_REGs_ACCESS ((volatile USART_REG * )USART4_BASE_ADDRESS) 
+#define  USART5_REGs_ACCESS ((volatile USART_REG * )USART5_BASE_ADDRESS) 
 
 
 
