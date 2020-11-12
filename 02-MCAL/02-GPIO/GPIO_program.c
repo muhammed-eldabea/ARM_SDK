@@ -1,253 +1,162 @@
-
-/*************************************************************************************
-
-&[File Name]   :  GPIO_program.c
-&[Author] 	   :  Muhammed Eldabea HAshem 
-&[Date]   	   :  19 Aug 2020 
-&[Description] :  functions definations that will be used  
-&[Version]     :  V01
-
- **************************************************************************************/
+/*========================================================================*/  
+/* [AUTHOR]      :  Muhammed Eldabea Hashem                               */
+/* [DATE ]       :  7 NOV 2020   										  */
+/* [VERSION]     :  V2.1                                                  */
+/*========================================================================*/ 
 
 
 
-/*==========================> INCLUDES <===============================*/
-
-
-/*including needded Bit math and STD types */
 #include "STD_TYPES.h" 
-#include "BIT_MATH.h"  
+#include "BIT_MATH.h"
 
-
-/* get the peripheral library */ 
-#include "GPIO_inteface.h"
+#include "GPIO_interface.h"
+#include "GPIO_config.h"
 #include "GPIO_private.h"
-#include "GPIO_config.h"	
 
 
 
 
+void GPIO_voidSetPinDirection(volatile  u8 Copy_u8PORT , volatile u8 Copy_u8PIN , volatile u8 Copy_u8PinState  ) 
+{
+
+u8 pin = 0 ; 
+
+if ((Copy_u8PIN <=15 ) && (Copy_u8PIN >=0) ) 
+{
+
+if (Copy_u8PIN <= 7 ) 
+{
+
+switch (Copy_u8PORT) 
+{
+
+case GPIOA : 
+ 				GPIOA_CRL = GPIOA_CRL & (!(0x0000000F << Copy_u8PIN))   ; 
+ 				GPIOA_CRL |= ((Copy_u8PinState & 0x0000000F)<<Copy_u8PIN ) ;    
+
+				break ;
+case GPIOB : 
+ 				GPIOB_CRL = GPIOB_CRL & (!(0x0000000F << Copy_u8PIN))   ; 
+ 				GPIOB_CRL |= ((Copy_u8PinState & 0x0000000F)<<Copy_u8PIN ) ;    
+
+				break ;
+case GPIOC :
+ 				GPIOC_CRL = GPIOC_CRL & (!(0x0000000F << Copy_u8PIN))   ; 
+ 				GPIOC_CRL |= ((Copy_u8PinState & 0x0000000F)<<Copy_u8PIN ) ;    
+
+				break ; 
+
+}
+
+} 
+else if (Copy_u8PIN > 7 ) 
+{
 
 
+pin = Copy_u8PIN - 8 ; 
+
+switch (Copy_u8PORT) 
+{
+
+case GPIOA : 
+ 				GPIOA_CRL = GPIOA_CRL & (!(0x0000000F << pin))   ; 
+ 				GPIOA_CRL |= ((Copy_u8PinState & 0x0000000F)<<pin ) ;    
+
+				break ;
+case GPIOB : 
+ 				GPIOB_CRL = GPIOB_CRL & (!(0x0000000F << pin))   ; 
+ 				GPIOB_CRL |= ((Copy_u8PinState & 0x0000000F)<<pin ) ;    
+
+				break ;
+case GPIOC :
+ 				GPIOC_CRL = GPIOC_CRL & (!(0x0000000F << pin))   ; 
+ 				GPIOC_CRL |= ((Copy_u8PinState & 0x0000000F)<<pin ) ;    
+
+				break ; 
+
+}
+
+}
 
 
-
-/*==========>Function Definations <===========*/
-
-void GPIO_voidSetDataDirection(uint8 copy_u8PORT,uint8 copy_u8PIN,uint8 copy_u8MODE) 
-{ 
-
-	/*--------------------------------------------------------------------------------------
-[FUNCTION NAME] :GPIO_voidSetDataDirection
-[DESRIPTION]    : used to configure the direction of the pin  
-[ARGUMENT(S)]   : 
-   [IN]  : PORT NAME (GPIOX) 
-   		   PIN Number (0-15)
- 		   MODE: 
- 		   		 GPIO_INPUT_ANALOG_MODE 
-				 GPIO_INPUT_FLOATING_MODE
-				 GPIO_INPUT_PULL_UP_DOWN_MODE
-				 GPIO_OUTPUT10_PUSH_PULL_MODE    	
-				 GPIO_OUTPUT10_OPEN_DRAIN_MODE   	
-				 GPIO_OUTPUT10_AF_PUSH_PULL_MODE 	
-				 GPIO_OUTPUT10_AF_OPEN_DRAIN_MODE	
-				 GPIO_OUTPUT2_PUSH_PULL_MODE    		
-				 GPIO_OUTPUT2_OPEN_DRAIN_MODE   		
-				 GPIO_OUTPUT2_AF_PUSH_PULL_MODE 		
-				 GPIO_OUTPUT2_AF_OPEN_DRAIN_MODE		
-				 GPIO_OUTPUT50_PUSH_PULL_MODE    	
-				 GPIO_OUTPUT50_OPEN_DRAIN_MODE   	
-				 GPIO_OUTPUT50_AF_PUSH_PULL_MODE 	
-				 GPIO_OUTPUT50_AF_OPEN_DRAIN_MODE	   
-   [OUT] :  	 void 
-
-[Return]      : void 
----------------------------------------------------------------------------------------*/ 
-
-
-
-	/*PINS from 0 to 7 dealing with low register
-and from 8 to 15 it deal with High register */
-
-	if(copy_u8PIN<=7)
-	{
-		switch (copy_u8PORT) 
-		{
-		case GPIOA :
-			GPIOA_CRL &= ~ ( ( 0b1111 )    << ( copy_u8PIN * 4 ));// R M W
-			GPIOA_CRL |= ( copy_u8MODE ) << ( copy_u8PIN * 4 );
-
-			break ;
-
-		case GPIOB :
-			GPIOB_CRL &= ~ ( ( 0b1111 )    << ( copy_u8PIN * 4 ));// R M W
-			GPIOB_CRL |= ( copy_u8MODE ) << ( copy_u8PIN * 4 );
-			break ;
-
-		case GPIOC :
-			if(copy_u8PIN <=2)
-			{
-				GPIOC_CRL &= ~ ( ( 0b1111 )    << ( copy_u8PIN * 4 ));// R M W
-				GPIOC_CRL |= ( copy_u8MODE ) << ( copy_u8PIN * 4 );
-			}
-			else
-			{
-				//#error ("PORTC has only a 3 PINS")
-			}
-			break ;
-
-
-
-
-		}
-
-	} 
-
-
-	else if ((copy_u8PIN <=15))
-	{	
-		/*we will dealing with a new register that used to configue the pins from 8-15 
-		we need to substruct the 8 from the pins number */
-		copy_u8PIN -=8 ; 
-
-		switch (copy_u8PORT) 
-		{
-		case GPIOA :
-			GPIOA_CRH &= ~ ( ( 0b1111 )    << ( copy_u8PIN * 4 ));// R M W
-			GPIOA_CRH |= ( copy_u8MODE ) << ( copy_u8PIN * 4 );
-			break ;
-
-		case GPIOB :
-			GPIOB_CRH &= ~ ( ( 0b1111 )    << ( copy_u8PIN * 4 ));// R M W
-			GPIOB_CRH |= ( copy_u8MODE ) << ( copy_u8PIN * 4 );
-			break ;
-
-		case GPIOC :
-			GPIOC_CRH &= ~ ( ( 0b1111 )    << ( copy_u8PIN * 4 ));// R M W
-			GPIOC_CRH |= ( copy_u8MODE ) << ( copy_u8PIN * 4 );
-			break ;
-
-
-
-
-		}
-
-
-
-
-	} 
-
-
-	/*EOF*/
 } 
 
 
-void GPIO_voidSetDataValue(uint8 copy_u8PORT,uint8 copy_u8PIN,uint8 copy_u8VALUE)
+
+/*  EOF */
+
+} 
+
+
+void GPIO_voidSetPinSTAT(volatile  u8 Copy_u8PORT , volatile u8 Copy_u8PIN , volatile u8 Copy_u8PinState) 
 {
-	/*--------------------------------------------------------------------------------------
-[FUNCTION NAME] :GPIO_voidSetValue
-[DESRIPTION]    : used to change the state of the pins from low to high and vice versa   
-[ARGUMENT(S)]   : 
-   [IN]  : PORT NAME (GPIOX) 
-   		   PIN Number (0-15)
- 		   VALUE/STATE: 
- 		   				>>HIGH
- 		   				>>LOW 	   
-   [OUT] :  	 void 
-
-[Return]      : void 
----------------------------------------------------------------------------------------*/ 
-
-
-
-
-
-
-	switch (copy_u8PORT)
-	{
-	case GPIOA :
-		if( copy_u8VALUE == HIGH ){
-
-			SET_BIT( GPIOA_ODR , copy_u8PIN );
-
-		}else if( copy_u8VALUE == LOW ){
-			CLEAR_BIT(  GPIOA_ODR , copy_u8PIN );
-		}
-		break ;
-
-	case GPIOB :
-		if( copy_u8VALUE == HIGH ){
-
-			SET_BIT( GPIOB_ODR , copy_u8PIN );
-
-		}else if( copy_u8VALUE == LOW ){
-			CLEAR_BIT(  GPIOB_ODR , copy_u8PIN );
-		}
-		break ;
-
-	case GPIOC :
-		if( copy_u8VALUE == HIGH ){
-
-			SET_BIT( GPIOC_ODR , copy_u8PIN );
-
-		}else if( copy_u8VALUE == LOW ){
-			CLEAR_BIT(  GPIOC_ODR , copy_u8PIN );
-		}
-		break ;
-
-
-
-
-	}
-
-
-
-	/*EOF*/
-}
-
-
-
-void GPIO_voidWriteToPort(uint8 copy_u8PORT,uint16 copy_u8PORTvalue)
-{
-	switch (copy_u8PORT)
-	{
-	case GPIOA :
-		GPIOA_ODR = copy_u8PORTvalue ;
-		break ;
-
-	case GPIOB :
-		GPIOB_ODR = copy_u8PORTvalue ;
-		break ;
-
-	case GPIOC :
-		GPIOC_ODR = copy_u8PORTvalue ;
-		break ;
-
-
-
-
-	}
-}
-
-uint8 GPIO_u8GetDataValue(uint8 copy_u8PORT,uint8 copy_u8PIN)
+ 
+switch (Copy_u8PORT) 
 {
 
-	switch(copy_u8PORT)
-	{
-	case GPIOA :
-		return GET_BIT(GPIOA_IDR,copy_u8PIN) ;
-		break ;
+case GPIOA : 
+ 	if (Copy_u8PinState == HIGH) 
+ 	{
+		SET_BIT(GPIOA_ODR,Copy_u8PIN) ; 
+ 	} 
+ 	else if (Copy_u8PinState == LOW) 
+ 	{
+ 		CLEAR_BIT(GPIOA_ODR,Copy_u8PIN) ; 
+ 	}
+	break ;
 
-	case GPIOB :
-		return GET_BIT(GPIOB_IDR,copy_u8PIN) ;
-		break ;
+case GPIOB : 
+ 	if (Copy_u8PinState == HIGH) 
+ 	{
+		SET_BIT(GPIOB_ODR,Copy_u8PIN) ; 
+ 	} 
+ 	else if (Copy_u8PinState == LOW) 
+ 	{
+ 		CLEAR_BIT(GPIOB_ODR,Copy_u8PIN) ; 
+ 	}
+	break ;
 
-	case GPIOC :
-		return GET_BIT(GPIOC_IDR,copy_u8PIN) ;
-		break ;
+case GPIOC : 
+ 	if (Copy_u8PinState == HIGH) 
+ 	{
+		SET_BIT(GPIOC_ODR,Copy_u8PIN) ; 
+ 	} 
+ 	else if (Copy_u8PinState == LOW) 
+ 	{
+ 		CLEAR_BIT(GPIOC_ODR,Copy_u8PIN) ; 
+ 	}
+	break ; 
 
-	}
 }
+ 
+} 
+
+
+ u8 GPIO_voidGetPinSTAT(volatile  u8 Copy_u8PORT , volatile u8 Copy_u8PIN ) 
+{
+	 u8 local_u8state = 0 ;
+
+switch (Copy_u8PORT) 
+{
+
+case GPIOA : 
+		local_u8state =  GET_BIT(GPIOA_IDR,Copy_u8PIN) ; 
+	break ;
+
+case GPIOB : 
+		local_u8state = GET_BIT(GPIOB_IDR,Copy_u8PIN) ; 
+	break ;
+
+case GPIOC : 
+		local_u8state = GET_BIT(GPIOC_IDR,Copy_u8PIN) ; 
+	break ; 
+
+} 
+return local_u8state ; 
+
+}  
+
+
 
 
 
